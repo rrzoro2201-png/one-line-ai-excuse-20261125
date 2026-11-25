@@ -15,5 +15,14 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const TEXT =
   "I didn't break production — I just ran a surprise resilience test at 3 a.m. It failed beautifully. Honestly, so would you.";
 
+// The brief caps the line at 180 characters: enforce it at runtime
+// instead of trusting the count, so a future edit that overshoots
+// fails loudly instead of silently entering an over-long line.
+if (TEXT.length > 180) {
+  console.error(`entry is ${TEXT.length} characters, over the 180 cap`);
+  process.exit(1);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", TEXT, "utf8");
+console.log(TEXT);
